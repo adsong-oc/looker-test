@@ -1,7 +1,7 @@
 view: matts_sum {
   derived_table: {
     sql: SELECT
-        SUM(pi.amount_cents) as donation_total_amount_cents,
+        IFNULL(SUM(pi.amount_cents), 0) as donation_total_amount_cents,
         ve.name as event_name
       FROM `dev-phaas-org-api`.organization o
       JOIN `dev-phaas-virtualevent-api`.virtual_event ve ON o.organization_id = ve.organization_id
