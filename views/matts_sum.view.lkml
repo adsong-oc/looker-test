@@ -6,13 +6,21 @@ view: matts_sum {
       FROM `dev-phaas-org-api`.organization o
       JOIN `dev-phaas-virtualevent-api`.virtual_event ve ON o.organization_id = ve.organization_id
       LEFT JOIN `dev-phaas-virtualevent-api`.purchased_item pi ON ve.id = pi.event_id AND pi.type = 'vevt-donation'
-      WHERE o.organization_id = {% parameter organization_id %}
+      WHERE
+      {% condition organization_id %} o.organization_id {% endcondition %}
       GROUP BY o.organization_id, o.name, ve.id, ve.name
        ;;
   }
-  parameter: organization_id {
+
+  filter: organization_id {
     type: string
+    bypass_suggest_restrictions: no
   }
+
+  # parameter: organization_id {
+  #   type: string
+  # }
+
   measure: count {
     type: count
     drill_fields: [detail*]
