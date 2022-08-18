@@ -18,3 +18,5 @@ include: "/commitment_test.view"                # include all views in the views
 #     sql_on: ${users.id} = ${orders.user_id} ;;
 #   }
 # }
+
+explore: commitment_test {}
