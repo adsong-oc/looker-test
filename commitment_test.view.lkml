@@ -4,12 +4,8 @@ view: commitment_test {
       ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
-  }
-
   dimension: id {
+    primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
   }
@@ -108,5 +104,15 @@ view: commitment_test {
       contact_phone,
       purchased_item_id
     ]
+  }
+
+  measure: count {
+    type: count
+    drill_fields: [detail*]
+  }
+
+  measure: total_amount_cents {
+    type: sum
+    sql: ${amount_cents} ;;
   }
 }
