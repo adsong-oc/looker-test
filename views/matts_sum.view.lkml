@@ -1,12 +1,22 @@
 view: matts_sum {
   derived_table: {
     sql: SELECT
-        IFNULL(SUM(pid.amount_cents), 0) as donation_total_amount_cents,
-        IFNULL(SUM(pit.amount_cents), 0) as ticket_total_amount_cents,
-        ve.name as event_name
+        ve.name as event_name,
+        'donations' as amount_type,
+        IFNULL(SUM(pid.amount_cents), 0) as amount_cents
       FROM `dev-phaas-org-api`.organization o
       JOIN `dev-phaas-virtualevent-api`.virtual_event ve ON o.organization_id = ve.organization_id
       LEFT JOIN `dev-phaas-virtualevent-api`.purchased_item pid ON ve.id = pid.event_id AND pid.type = 'vevt-donation' AND pid.transaction_status = 'successful' AND pid.deleted = 0
+      WHERE
+      {% condition organization_id %} o.organization_id {% endcondition %}
+      GROUP BY o.organization_id, o.name, ve.id, ve.name
+      UNION
+      SELECT
+        ve.name as event_name,
+        'tickets' as amount_type,
+        IFNULL(SUM(pit.amount_cents), 0) as amount_cents
+      FROM `dev-phaas-org-api`.organization o
+      JOIN `dev-phaas-virtualevent-api`.virtual_event ve ON o.organization_id = ve.organization_id
       LEFT JOIN `dev-phaas-virtualevent-api`.purchased_item pit ON ve.id = pit.event_id AND pit.type = 'vevt-ticket' AND pit.transaction_status = 'successful' AND pit.deleted = 0
       WHERE
       {% condition organization_id %} o.organization_id {% endcondition %}
@@ -19,23 +29,14 @@ view: matts_sum {
     bypass_suggest_restrictions: no
   }
 
-  # parameter: organization_id {
-  #   type: string
-  # }
-
   measure: count {
     type: count
     drill_fields: [detail*]
   }
 
-  measure: donation_total_amount_cents {
+  measure: amount_cents {
     type: number
-    sql: ${TABLE}.donation_total_amount_cents ;;
-  }
-
-  measure: ticket_total_amount_cents {
-    type: number
-    sql: ${TABLE}.ticket_total_amount_cents ;;
+    sql: ${TABLE}.amount_cents ;;
   }
 
   dimension: event_name {
@@ -43,7 +44,12 @@ view: matts_sum {
     sql: ${TABLE}.event_name ;;
   }
 
+  dimension: amount_type {
+    type: string
+    sql: ${TABLE}.amount_type ;;
+  }
+
   set: detail {
-    fields: [donation_total_amount_cents, ticket_total_amount_cents, event_name]
+    fields: [amount_cents, amount_type, event_name]
   }
 }
