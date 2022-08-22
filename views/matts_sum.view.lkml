@@ -12,7 +12,7 @@ view: matts_sum {
       GROUP BY o.organization_id, o.name, ve.id, ve.name
       UNION
       SELECT
-        ve.name as event_name,
+       ve.name as event_name,
         'tickets' as amount_type,
         IFNULL(SUM(pit.amount_cents), 0) as amount_cents
       FROM `dev-phaas-org-api`.organization o
