@@ -1,4 +1,4 @@
-view: dev_poc_view_by_puchase_type {
+view: dev_poc_event_proceeds_by_type {
  derived_table: {
   sql: WITH
         eventIDsCTE AS (
