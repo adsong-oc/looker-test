@@ -9,8 +9,8 @@ view: dev_poc_event_proceeds_by_type {
             `dev-phaas-virtualevent-api`.virtual_event
           WHERE
             {% condition organization_id %} organization_id {% endcondition %}
-            AND primary_date < CURDATE()
-          ORDER BY primary_date DESC
+            AND primary_end_date < CURDATE()
+          ORDER BY primary_end_date DESC
           LIMIT 3
         )
       SELECT
