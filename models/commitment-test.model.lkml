@@ -2,6 +2,7 @@ connection: "dev"
 
 include: "/commitment_test.view"                # include all views in the views/ folder in this project
 include: "../views/event_name.view"
+include: "../views/purchased_item.view"
 # include: "/**/*.view.lkml"                 # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
@@ -30,4 +31,12 @@ explore: event_name {
     sql_on: ${commitment_test.event_id} = ${event_name.id} AND NOT ${commitment_test.deleted};;
     relationship: many_to_many
   }
+  join: purchased_item {
+    sql_on: ${event_name.id} = ${purchased_item.event_id} AND NOT ${purchased_item.deleted};;
+    relationship: one_to_many
+  }
+}
+
+explore: purchased_item {
+
 }
