@@ -1,18 +1,19 @@
 view: org_top_sponsors {
   derived_table: {
     sql: SELECT
-        saes.sponsor_attachment_id,
+        sa.sponsor_attachment_id,
         s.organization_id,
         s.name,
         s.logo_url,
         s.sponsor_id,
-        saes.external_id,
-        saes.amount_cents
+        sa.external_id,
+        COALESCE(SUM(saes.amount_cents), 0) as amount_cents
       FROM `dev-phaas-sponsor-api`.sponsor s
       JOIN `dev-phaas-sponsor-api`.sponsor_attachment sa ON sa.sponsor_id = s.sponsor_id
       JOIN `dev-phaas-sponsor-api`.sponsor_attachment_event_sale saes ON saes.sponsor_attachment_id = sa.sponsor_attachment_id AND NOT saes.deleted
       WHERE {% condition organization_id %} s.organization_id {% endcondition %}
-      AND {% condition event_id %} saes.external_id {% endcondition %}
+      AND {% condition event_id %} sa.external_id {% endcondition %}
+      GROUP BY sa.sponsor_attachment_id
        ;;
   }
 
