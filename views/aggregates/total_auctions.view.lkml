@@ -15,6 +15,7 @@ view: total_auctions {
       )
       SELECT
         ve.id as event_id,
+        'Auctions' as agg_type,
         IFNULL(type_total.total_amount_cents, 0) AS total_amount_cents
       FROM
         `dev-phaas-virtualevent-api`.virtual_event ve
@@ -44,12 +45,18 @@ view: total_auctions {
 
   dimension: event_id {
     type: string
+    primary_key: yes
     sql: ${TABLE}.event_id ;;
   }
 
   dimension: total_amount_cents {
     type: number
     sql: ${TABLE}.total_amount_cents ;;
+  }
+
+  dimension: agg_type {
+    type:  string
+    sql:  ${TABLE}.agg_type ;;
   }
 
   set: detail {

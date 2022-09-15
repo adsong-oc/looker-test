@@ -15,6 +15,12 @@ view: event_name {
     drill_fields: [detail*]
   }
 
+  # Custom Filter
+  filter: event {
+    type:  string
+    sql:  ${TABLE}.name ${TABLE}.primary_end_date ;;
+  }
+
   # Templated filter
   filter: organization_id {
     type: string

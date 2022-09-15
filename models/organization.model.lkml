@@ -10,6 +10,7 @@ include: "/views/aggregates/total_tickets.view.lkml"
 include: "/views/aggregates/total_sponsorships.view.lkml"
 include: "/views/aggregates/total_auctions.view.lkml"
 include: "/views/aggregates/total_fp_and_raffle.view.lkml"
+include: "/views/aggregates/aggregate_union.view.lkml"
 
 explore: organization {
   join: event_name {
@@ -18,6 +19,7 @@ explore: organization {
     relationship: one_to_many
   }
 
+  # Joining Aggregates to the Events
   join: total_donations {
     type: left_outer
     sql_on: ${event_name.id} = ${total_donations.event_id} ;;
@@ -46,6 +48,12 @@ explore: organization {
     type: left_outer
     sql_on: ${event_name.id} = ${total_fp_and_raffle.event_id} ;;
     relationship: one_to_one
+  }
+
+  join: aggregate_union {
+    type: inner
+    relationship: one_to_many
+    sql_on: ${event_name.id} = ${aggregate_union.event_id} ;;
   }
 
   # Used as filters for the inner views while creating the SQL
@@ -83,10 +91,31 @@ explore: organization {
     field:  total_fp_and_raffle.organization_id
     user_attribute: test_org_id
   }
+
+
 }
+
+# explore: event_name {
+#   join: aggregate_union {
+#     type: inner
+#     relationship: one_to_many
+#     sql: ${event_name.id} = ${aggregate_union.event_id} ;;
+#   }
+
+#   access_filter: {
+#     field:  event_name.organization_id
+#     user_attribute: test_org_id
+#   }
+
+#   access_filter: {
+#     field:  aggregate_union.organization_id
+#     user_attribute: test_org_id
+#   }
+# }
 
 
 # Separate explore for sponsors. Joining this to the above explore would limit the events shown to those with sponsors only
+# They can still share a filter (I'm not certain what cross-filtering even does now).
 explore: org_top_sponsors {
   join: event_name {
     type: left_outer

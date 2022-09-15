@@ -39,7 +39,8 @@ view: total_donations {
       )
     SELECT
       events.event_id,
-      (IFNULL(donations.amount_cents, 0) + IFNULL(events.seed_amount_cents, 0) + IFNULL(commitments.amount_cents, 0)) as donations_amount_cents
+      'Donations' as agg_type,
+      (IFNULL(donations.amount_cents, 0) + IFNULL(events.seed_amount_cents, 0) + IFNULL(commitments.amount_cents, 0)) as total_amount_cents
     FROM
       events
       LEFT JOIN donations ON donations.event_id = events.event_id
@@ -54,6 +55,7 @@ view: total_donations {
   dimension: event_id {
     type:  string
     primary_key: yes
+    sql:  ${TABLE}.event_id ;;
   }
 
   measure: count {
@@ -64,16 +66,21 @@ view: total_donations {
   # Transforming the column outside of the SQL here
   measure: donations {
     type: number
-    sql:  ${TABLE}.donations_amount_cents / 100;;
+    sql:  ${TABLE}.total_amount_cents / 100;;
     value_format_name: usd
   }
 
-  dimension: donations_amount_cents {
+  dimension: total_amount_cents {
     type: number
-    sql: ${TABLE}.donations_amount_cents ;;
+    sql: ${TABLE}.total_amount_cents ;;
+  }
+
+  dimension: agg_type {
+    type:  string
+    sql:  ${TABLE}.agg_type ;;
   }
 
   set: detail {
-    fields: [event_id, donations_amount_cents]
+    fields: [event_id, total_amount_cents]
   }
 }
