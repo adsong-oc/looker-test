@@ -30,6 +30,7 @@ view: total_donations {
     SELECT
       events.id as event_id,
       'Donations' as agg_type,
+      1 as display_order,
       (IFNULL(donations.amount_cents, 0) + IFNULL(events.total_donation_moments_seed_amount_cents, 0) + IFNULL(commitments.amount_cents, 0)) as total_amount_cents
     FROM
       ${events_for_org.SQL_TABLE_NAME} events
@@ -68,6 +69,11 @@ view: total_donations {
   dimension: agg_type {
     type:  string
     sql:  ${TABLE}.agg_type ;;
+  }
+
+  dimension: display_order {
+    type:  number
+    sql:  ${TABLE}.display_order ;;
   }
 
   set: detail {

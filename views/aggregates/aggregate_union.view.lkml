@@ -29,9 +29,14 @@ view: aggregate_union {
 
   dimension: agg_type {
     type: string
+    order_by_field: display_order
   }
 
   dimension: total_amount_cents {
+    type:  number
+  }
+
+  dimension: display_order {
     type:  number
   }
 

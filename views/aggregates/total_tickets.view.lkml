@@ -18,6 +18,7 @@ view: total_tickets {
       SELECT
         ve.id as event_id,
         'Tickets' as agg_type,
+        5 as display_order,
         IFNULL(type_total.total_amount_cents, 0) AS total_amount_cents
       FROM
         ${events_for_org.SQL_TABLE_NAME} ve

@@ -13,6 +13,8 @@ view: events_for_org {
             NOT deleted
             AND NOT test_event
             AND {% condition organization_id %} organization_id {% endcondition %}
+          ORDER BY
+            primary_end_date DESC
             ;;
   }
 
@@ -21,28 +23,22 @@ view: events_for_org {
     drill_fields: [detail*]
   }
 
-  # Custom Filter
-  filter: event {
-    type:  string
-    sql:  ${TABLE}.name ${TABLE}.primary_end_date ;;
-  }
-
   # Templated filter
   filter: organization_id {
     type: string
     sql: {% condition organization_id %} ${event_organization_id} {% endcondition %} ;;
   }
 
-  filter: event_id {
-    type:  string
-    sql: ${TABLE}.id ;;
-  }
+  # filter: event_id {
+  #   type:  string
+  #   sql: ${TABLE}.id ;;
+  # }
 
-  # The SQL is what gets injected into the SQL query.
-  filter: event_name {
+
+  # Custom dimension that concatenates the name + primary end date.
+  dimension: event_name_and_date {
     type:  string
-    suggest_dimension: name
-    sql: {% condition event_name %} ${TABLE}.name {% endcondition %};;
+    sql:  CONCAT(${TABLE}.name, ' ', IFNULL(DATE_FORMAT(${TABLE}.primary_end_date, '%m/%d/%y'), ''));;
   }
 
   dimension: event_organization_id {
@@ -69,6 +65,16 @@ view: events_for_org {
   dimension: primary_end_date {
     type: date
     sql: ${TABLE}.primary_end_date ;;
+  }
+
+  dimension: event_status {
+    case: {
+      when: {
+        sql: ${TABLE}.primary_end_date >= NOW() ;;
+        label: "Upcoming"
+      }
+      else: "Past"
+    }
   }
 
   dimension: total_donation_moments_seed_amount_cents {

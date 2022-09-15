@@ -18,6 +18,7 @@ view: total_sponsorships {
       SELECT
         ve.id as event_id,
         'Sponsorships' as agg_type,
+        4 as display_order,
         IFNULL(type_total.total_amount_cents, 0) AS total_amount_cents
       FROM
         ${events_for_org.SQL_TABLE_NAME} ve
@@ -55,6 +56,11 @@ view: total_sponsorships {
   dimension: agg_type {
     type:  string
     sql:  ${TABLE}.agg_type ;;
+  }
+
+  dimension: display_order {
+    type:  number
+    sql:  ${TABLE}.display_order ;;
   }
 
   set: detail {

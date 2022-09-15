@@ -18,6 +18,7 @@ view: total_fp_and_raffle {
       SELECT
         ve.id as event_id,
         'Raffle & Fixed Price Sales' as agg_type,
+        3 as display_order,
         IFNULL(type_total.total_amount_cents, 0) AS total_amount_cents
       FROM
         ${events_for_org.SQL_TABLE_NAME} ve
@@ -55,6 +56,11 @@ view: total_fp_and_raffle {
   dimension: agg_type {
     type:  string
     sql:  ${TABLE}.agg_type ;;
+  }
+
+  dimension: display_order {
+    type:  number
+    sql:  ${TABLE}.display_order ;;
   }
 
   set: detail {
