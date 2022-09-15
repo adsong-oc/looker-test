@@ -1,6 +1,10 @@
 view: events_for_org {
   derived_table: {
-    sql: SELECT
+    sql:SELECT
+          *,
+          ROW_NUMBER() OVER w AS 'row_number'
+        FROM (
+          SELECT
             id,
             name,
             organization_id,
@@ -15,12 +19,14 @@ view: events_for_org {
             AND {% condition organization_id %} organization_id {% endcondition %}
           ORDER BY
             primary_end_date DESC
-            ;;
+        ) events
+        WINDOW w AS (ORDER BY primary_end_date DESC)
+     ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
+  dimension: row_number {
+    type: number
+    sql: ${TABLE}.row_number ;;
   }
 
   # Templated filter
@@ -39,6 +45,7 @@ view: events_for_org {
   dimension: event_name_and_date {
     type:  string
     sql:  CONCAT(${TABLE}.name, ' ', IFNULL(DATE_FORMAT(${TABLE}.primary_end_date, '%m/%d/%y'), ''));;
+    order_by_field: row_number
   }
 
   dimension: event_organization_id {
@@ -55,6 +62,7 @@ view: events_for_org {
   dimension: name {
     type: string
     sql: ${TABLE}.name ;;
+    order_by_field: date_diff
   }
 
   dimension: primary_date {
@@ -67,6 +75,7 @@ view: events_for_org {
     sql: ${TABLE}.primary_end_date ;;
   }
 
+  # Unused
   dimension: event_status {
     case: {
       when: {
@@ -77,9 +86,22 @@ view: events_for_org {
     }
   }
 
+  # Custom dimension to get a value of the end date to the current date. If the primary end date is null
+  # it is set to 9999 which is a random, large number
+  dimension: date_diff {
+    type:  number
+    hidden: yes
+    sql: IFNULL(ABS(DATEDIFF(${TABLE}.primary_end_date, NOW())), 9999) ;;
+  }
+
   dimension: total_donation_moments_seed_amount_cents {
     type:  number
     sql:  ${TABLE}.total_donation_moments_seed_amount_cents ;;
+  }
+
+  measure: count {
+    type: count
+    drill_fields: [detail*]
   }
 
   set: detail {

@@ -21,6 +21,7 @@ view: aggregate_union {
 
   filter: organization_id {
     type:  string
+    sql:  {% condition organization_id %} organization_id {% endcondition %};;
   }
 
   dimension:  event_id {

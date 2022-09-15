@@ -21,31 +21,31 @@ explore: organization {
 
   # Joining Aggregates to the Events
   join: total_donations {
-    type: left_outer
+    type: inner
     sql_on: ${events_for_org.id} = ${total_donations.event_id} ;;
     relationship: one_to_one
   }
 
   join: total_tickets {
-    type: left_outer
+    type: inner
     sql_on: ${events_for_org.id} = ${total_tickets.event_id} ;;
     relationship: one_to_one
   }
 
   join: total_sponsorships {
-    type: left_outer
+    type: inner
     sql_on: ${events_for_org.id} = ${total_sponsorships.event_id} ;;
     relationship: one_to_one
   }
 
   join: total_auctions {
-    type: left_outer
+    type: inner
     sql_on: ${events_for_org.id} = ${total_auctions.event_id} ;;
     relationship: one_to_one
   }
 
   join: total_fp_and_raffle {
-    type: left_outer
+    type: inner
     sql_on: ${events_for_org.id} = ${total_fp_and_raffle.event_id} ;;
     relationship: one_to_one
   }

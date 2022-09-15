@@ -12,13 +12,13 @@ view: total_auctions {
           NOT pi.deleted
           AND pi.transaction_status != 'failed'
           AND {% condition organization_id %} pi.organization_id {% endcondition %}
-          AND pi.type IN ('vevt-auction-lot')
+          AND pi.type IN ('vevt-fixed-price','vevt-raffle')
         GROUP BY pi.event_id
       )
       SELECT
         ve.id as event_id,
-        'Auctions' as agg_type,
-        2 as display_order,
+        'Raffle & Fixed Price Sales' as agg_type,
+        3 as display_order,
         IFNULL(type_total.total_amount_cents, 0) AS total_amount_cents
       FROM
         ${events_for_org.SQL_TABLE_NAME} ve
