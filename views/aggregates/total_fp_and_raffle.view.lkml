@@ -1,3 +1,5 @@
+include: "./events_for_org.view.lkml"
+
 view: total_fp_and_raffle {
   derived_table: {
     sql: WITH type_total AS (
@@ -18,13 +20,9 @@ view: total_fp_and_raffle {
         'Raffle & Fixed Price Sales' as agg_type,
         IFNULL(type_total.total_amount_cents, 0) AS total_amount_cents
       FROM
-        `dev-phaas-virtualevent-api`.virtual_event ve
+        ${events_for_org.SQL_TABLE_NAME} ve
       LEFT JOIN
         type_total ON type_total.event_id = ve.id
-      WHERE
-        NOT ve.deleted
-        AND NOT ve.test_event
-        AND {% condition organization_id %} ve.organization_id {% endcondition %}
  ;;
   }
 
