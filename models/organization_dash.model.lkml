@@ -24,12 +24,12 @@ explore: organization {
   # Used as filters for the inner views while creating the SQL
   access_filter: {
     field: organization.organization_id
-    user_attribute: test_org_id
+    user_attribute: organization_id
   }
 
   access_filter: {
     field:  events_for_org.organization_id
-    user_attribute: test_org_id
+    user_attribute: organization_id
   }
 }
 
@@ -45,11 +45,11 @@ explore: org_top_sponsors {
 
   access_filter: {
     field: org_top_sponsors.organization_id
-    user_attribute: test_org_id
+    user_attribute: organization_id
   }
 
   access_filter: {
     field:  events_for_org.organization_id
-    user_attribute: test_org_id
+    user_attribute: organization_id
   }
 }
