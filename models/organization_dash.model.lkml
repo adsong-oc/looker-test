@@ -1,4 +1,4 @@
-connection: "dev"
+connection: "@{stack}"
 
 include: "/views/organization.view.lkml"
 include: "/views/org_top_sponsors.view.lkml"
@@ -6,6 +6,7 @@ include: "/views/org_top_sponsors.view.lkml"
 # Aggregate tables
 include: "/views/aggregates/events_for_org.view.lkml"
 include: "/views/aggregates/proceeds_union.view.lkml"
+
 
 explore: organization {
   join: events_for_org {

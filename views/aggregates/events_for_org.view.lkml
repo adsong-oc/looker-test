@@ -12,7 +12,7 @@ view: events_for_org {
             primary_end_date,
             total_donation_moments_seed_amount_cents
           FROM
-            `dev-phaas-virtualevent-api`.virtual_event
+            `@{stack}-phaas-virtualevent-api`.virtual_event
           WHERE
             NOT deleted
             AND NOT test_event
