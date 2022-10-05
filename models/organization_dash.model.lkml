@@ -7,9 +7,6 @@ include: "/views/org_top_sponsors.view.lkml"
 include: "/views/aggregates/events_for_org.view.lkml"
 include: "/views/aggregates/proceeds_union.view.lkml"
 
-# dashboards
-include: "/MattsSuperSweetDashboard.dashboard.lookml"
-
 explore: organization {
   join: events_for_org {
     type:  inner

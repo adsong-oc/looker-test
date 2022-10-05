@@ -1,5 +1,5 @@
-- dashboard: events_dashboard
-  title: Events Dashboard - Matts Super Sweet Dashboard - slug test
+- dashboard: matts_super_sweet_dashboard
+  title: Matts Super Sweet Dashboard (aka - Events Dashboard)
   layout: newspaper
   preferred_viewer: dashboards-next
   description: ''
@@ -8,7 +8,7 @@
   elements:
   - name: Event Proceeds by Type
     title: Event Proceeds by Type
-    model: '@{stack}_organization_dash'
+    model: '@{stack}_matts_super_sweet_model'
     explore: organization
     type: looker_column
     fields: [events_for_org.name, proceeds_union.agg_type, proceeds_union.total_amount]
@@ -74,7 +74,7 @@
     height: 12
   - name: Top Sponsors
     title: Top Sponsors
-    model: '@{stack}_organization_dash'
+    model: '@{stack}_matts_super_sweet_model'
     explore: org_top_sponsors
     type: looker_grid
     fields: [org_top_sponsors.name, org_top_sponsors.total]
@@ -128,7 +128,7 @@
     ui_config:
       type: tag_list
       display: popover
-    model: '@{stack}_organization_dash'
+    model: '@{stack}_matts_super_sweet_model'
     explore: organization
     listens_to_filters: []
     field: events_for_org.event_name_and_date

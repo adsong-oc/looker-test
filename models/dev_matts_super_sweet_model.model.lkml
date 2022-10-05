@@ -8,7 +8,7 @@ include: "/views/aggregates/events_for_org.view.lkml"
 include: "/views/aggregates/proceeds_union.view.lkml"
 
 # dashboards
-include: "/MattsSuperSweetDashboard.dashboard.lookml"
+include: "/dashboards/matts_super_sweet_dashboard.dashboard.lookml"
 
 explore: organization {
   join: events_for_org {
