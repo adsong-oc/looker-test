@@ -1,10 +1,10 @@
 - dashboard: events_dashboard
-  title: Events Dashboard - Matts Super Sweet Dashboard
+  title: Events Dashboard - Matts Super Sweet Dashboard - slug test
   layout: newspaper
   preferred_viewer: dashboards-next
   description: ''
   filters_bar_collapsed: true
-  preferred_slug: ePX6FIH2kPzGVerl73Ls8v
+  preferred_slug: mattandandrewtest12345
   elements:
   - name: Event Proceeds by Type
     title: Event Proceeds by Type
