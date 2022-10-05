@@ -8,7 +8,7 @@
   elements:
   - name: Event Proceeds by Type
     title: Event Proceeds by Type
-    model: organization_dash
+    model: '@{stack}_organization_dash'
     explore: organization
     type: looker_column
     fields: [events_for_org.name, proceeds_union.agg_type, proceeds_union.total_amount]
@@ -74,7 +74,7 @@
     height: 12
   - name: Top Sponsors
     title: Top Sponsors
-    model: organization_dash
+    model: '@{stack}_organization_dash'
     explore: org_top_sponsors
     type: looker_grid
     fields: [org_top_sponsors.name, org_top_sponsors.total]
@@ -128,7 +128,7 @@
     ui_config:
       type: tag_list
       display: popover
-    model: organization_dash
+    model: '@{stack}_organization_dash'
     explore: organization
     listens_to_filters: []
     field: events_for_org.event_name_and_date
